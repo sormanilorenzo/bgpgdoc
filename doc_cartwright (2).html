@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>James "Doc" Cartwright</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #1a1308;
+  --bg2:       #221a0a;
+  --line:      rgba(210,175,100,0.22);
+  --gold:      #d4a84b;
+  --gold-dim:  #9a7535;
+  --gold-glow: rgba(212,168,75,0.15);
+  --text:      #f0e6cc;
+  --text-dim:  #b8a882;
+  --text-mid:  #d4c4a0;
+  --red:       #8b2a1a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── CANVAS BACKGROUND ── */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* everything on top of canvas */
+nav, .hero, .section, footer { position: relative; z-index: 1; }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  padding: 18px 40px;
+  background: linear-gradient(to bottom, rgba(26,19,8,0.97) 60%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+nav a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+nav a:hover {
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(212,168,75,0.5);
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.1s forwards;
+}
+
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(60px, 9vw, 116px);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -1px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 80px rgba(212,168,75,0.2);
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.25s forwards;
+}
+
+.hero-alias {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 3.5vw, 38px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--gold);
+  margin-bottom: 52px;
+  text-shadow: 0 0 40px rgba(212,168,75,0.35);
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.4s forwards;
+}
+
+.hero-line {
+  width: 1px;
+  height: 70px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  margin: 0 auto 52px;
+  opacity: 0;
+  animation: fadeIn 1s ease 0.55s forwards;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.65s forwards;
+}
+
+.meta-item { text-align: center; }
+.meta-label {
+  font-size: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  display: block;
+  margin-bottom: 5px;
+}
+.meta-value {
+  font-size: 15px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+
+/* ── REVEAL ON SCROLL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── SECTIONS ── */
+.section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 110px 40px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 5vw, 54px);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 44px;
+  letter-spacing: -0.5px;
+}
+.section-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+p {
+  font-size: 17.5px;
+  line-height: 1.88;
+  color: var(--text-dim);
+  margin-bottom: 22px;
+  font-weight: 300;
+}
+p strong { color: var(--text-mid); font-weight: 400; }
+p:last-child { margin-bottom: 0; }
+
+/* ── DOSSIER TABLE ── */
+.dossier {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--line);
+  margin-top: 48px;
+}
+.dossier-row {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  transition: background 0.3s;
+}
+.dossier-row:hover { background: rgba(212,168,75,0.05); }
+.dossier-row:nth-child(even) { border-right: none; }
+.dossier-row:nth-last-child(-n+2) { border-bottom: none; }
+
+.dossier-key {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  display: block;
+  margin-bottom: 4px;
+}
+.dossier-val {
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 400;
+}
+
+/* ── TRAITS ── */
+.traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 36px;
+}
+.trait {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  padding: 7px 16px;
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+.trait:hover {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: rgba(212,168,75,0.07);
+}
+
+/* ── PULL QUOTE ── */
+.pull-quote {
+  margin: 48px 0;
+  padding: 36px 0 36px 32px;
+  border-left: 2px solid var(--gold-dim);
+  position: relative;
+}
+.pull-quote::before {
+  content: '';
+  position: absolute;
+  left: -2px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  animation: lineGlow 3s ease-in-out infinite;
+}
+.pull-quote p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(20px, 3vw, 28px);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.55;
+  margin: 0;
+}
+
+@keyframes lineGlow {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+/* ── TIMELINE ── */
+.tl-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 32px;
+  padding: 34px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+  transition: background 0.3s;
+}
+.tl-item:hover { background: rgba(212,168,75,0.03); }
+.tl-item:first-child { padding-top: 0; }
+.tl-item:last-child { border-bottom: none; }
+
+.tl-year {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--gold);
+  padding-top: 2px;
+  line-height: 1.4;
+}
+.tl-content p { font-size: 16px; margin: 0; }
+
+/* ── OBJECTIVES ── */
+.obj-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding-left 0.3s;
+}
+.obj-item:hover { padding-left: 8px; }
+.obj-item:last-child { border-bottom: none; }
+
+.obj-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold-dim);
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  padding-top: 3px;
+  width: 28px;
+}
+.obj-text {
+  font-size: 16.5px;
+  color: var(--text-dim);
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 60px 40px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  nav { gap: 18px; padding: 14px 20px; }
+  .section { padding: 70px 24px; }
+  .dossier { grid-template-columns: 1fr; }
+  .dossier-row { border-right: none; }
+  .dossier-row:nth-last-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .dossier-row:last-child { border-bottom: none; }
+  .tl-item { grid-template-columns: 1fr; gap: 6px; }
+  .hero-meta { gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ANIMATED BACKGROUND -->
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <a href="#profilo">Profilo</a>
+  <a href="#carattere">Carattere</a>
+  <a href="#storia">Storia</a>
+  <a href="#timeline">Cronologia</a>
+  <a href="#obiettivi">Obiettivi</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Red Dead Redemption — Roleplay</div>
+  <h1 class="hero-name">James Cartwright</h1>
+  <div class="hero-alias">"Doc"</div>
+  <div class="hero-line"></div>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-label">Nato il</span>
+      <span class="meta-value">12 Settembre 1863</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Luogo di nascita</span>
+      <span class="meta-value">Deadwood, Dakota Territory</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Professione</span>
+      <span class="meta-value">Medico itinerante</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Tipologia</span>
+      <span class="meta-value">Civile — Legale</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILO -->
+<section class="section reveal" id="profilo">
+  <div class="section-label">Dossier</div>
+  <h2 class="section-title">Profilo <em>Identificativo</em></h2>
+  <div class="dossier">
+    <div class="dossier-row"><span class="dossier-key">Nome completo</span><span class="dossier-val">James William Cartwright</span></div>
+    <div class="dossier-row"><span class="dossier-key">Soprannome</span><span class="dossier-val">"Doc"</span></div>
+    <div class="dossier-row"><span class="dossier-key">Data di nascita</span><span class="dossier-val">12 Settembre 1863</span></div>
+    <div class="dossier-row"><span class="dossier-key">Luogo di nascita</span><span class="dossier-val">Deadwood, Dakota Territory</span></div>
+    <div class="dossier-row"><span class="dossier-key">Padre</span><span class="dossier-val">William Cartwright †</span></div>
+    <div class="dossier-row"><span class="dossier-key">Madre</span><span class="dossier-val">Eleanor Cartwright</span></div>
+    <div class="dossier-row"><span class="dossier-key">Tipologia RP</span><span class="dossier-val">Civile / Legale</span></div>
+    <div class="dossier-row"><span class="dossier-key">Professione</span><span class="dossier-val">Medico itinerante</span></div>
+  </div>
+  <div class="traits">
+    <span class="trait">Silenzioso</span><span class="trait">Riflessivo</span><span class="trait">Empatico</span>
+    <span class="trait">Disciplinato</span><span class="trait">Metodico</span><span class="trait">Paziente</span>
+    <span class="trait">Osservatore</span><span class="trait">Mani ferme</span><span class="trait">Distaccato</span>
+  </div>
+</section>
+
+<!-- CARATTERE -->
+<section class="section reveal" id="carattere">
+  <div class="section-label">Carattere</div>
+  <h2 class="section-title">Profilo <em>Psicologico</em></h2>
+  <p>James Cartwright è un uomo <strong>silenzioso, riflessivo e difficile da leggere</strong>. Ha imparato presto che nel Far West le parole valgono poco e che spesso sono le azioni a decidere il valore di un uomo. Nonostante il suo atteggiamento freddo e controllato, dentro di sé porta un forte senso di empatia verso chi soffre, probabilmente nato dalle tragedie vissute durante la sua giovinezza.</p>
+  <div class="pull-quote">
+    <p>Le sue mani restano ferme anche nei momenti più critici — qualità che negli anni gli ha fatto guadagnare rispetto tra medici, viaggiatori e uomini di frontiera.</p>
+  </div>
+  <p>Tende a non legarsi facilmente alle persone. Ha paura di affezionarsi e perdere ancora qualcuno, motivo per cui spesso preferisce restare distante e concentrarsi sul lavoro. Non ama parlare del proprio passato e quando qualcuno nomina la sua famiglia cambia immediatamente discorso. Dietro il suo sguardo stanco si nasconde però un uomo ancora capace di credere che una persona possa cambiare vita, indipendentemente da quanto sia caduta in basso.</p>
+  <p>È <strong>disciplinato, metodico e molto paziente</strong>. Durante gli anni passati sui treni ha imparato a osservare il comportamento delle persone, a riconoscere bugiardi, criminali e uomini disperati semplicemente dal modo in cui parlano o si muovono. Non sopporta gli uomini arroganti o chi usa la violenza sui più deboli. Quando qualcuno ha bisogno di cure, James mette da parte qualsiasi differenza personale, convinto che salvare una vita venga prima di tutto.</p>
+</section>
+
+<!-- STORIA -->
+<section class="section reveal" id="storia">
+  <div class="section-label">Storia</div>
+  <h2 class="section-title">Il Passato di <em>James</em></h2>
+  <p>James Cartwright nacque il 12 settembre del 1863 in una piccola fattoria poco distante da Deadwood, nel Dakota Territory. La sua famiglia viveva di allevamento e agricoltura, conducendo una vita dura ma onesta. Suo padre, <strong>William Cartwright</strong>, era un uomo severo che aveva combattuto per costruire da zero ciò che possedeva. Sua madre, <strong>Eleanor</strong>, era invece una donna gentile e religiosa, conosciuta nella zona per aiutare malati e viaggiatori in difficoltà. James crebbe insieme a due fratelli maggiori e una sorella minore, imparando presto il valore del lavoro e del sacrificio.</p>
+  <p>Fin da bambino mostrò una curiosità diversa dagli altri ragazzi della sua età. Mentre i fratelli si interessavano ai cavalli o alle armi, James passava il tempo ad ascoltare i racconti dei viaggiatori che attraversavano il territorio, affascinato dalle città lontane, dalle locomotive e da quel mondo enorme che sembrava esistere oltre le colline polverose della fattoria.</p>
+  <p>A soli <strong>tredici anni</strong> lasciò casa per lavorare sui treni mercantili. Iniziò come semplice aiutante — puliva vagoni, caricava merci, aiutava i macchinisti. Viaggiando da uno stato all'altro vide città crescere dal nulla, uomini morire per una partita a carte e famiglie intere distrutte dalla povertà. Fu durante quei viaggi che ebbe occasione di assistere medici improvvisati che operavano direttamente sui treni. Rimase colpito dalla freddezza con cui lavoravano sotto pressione e iniziò ad aiutarli quando possibile. Fu lì che imparò a tenere le mani ferme.</p>
+  <p>Tornò alla fattoria soltanto molti anni dopo, quando ricevette notizia della <strong>morte del padre</strong>. William era rimasto vittima di un incidente durante una tempesta e la perdita distrusse la stabilità della famiglia. La madre non riuscì mai a superare quel dolore: colpita da un forte crollo nervoso, iniziò a perdere il controllo della propria vita e della reputazione familiare. Le voci si diffusero rapidamente e il nome dei Cartwright, un tempo rispettato, divenne motivo di vergogna. La situazione peggiorò ulteriormente quando uno dei fratelli venne arrestato per una rapina.</p>
+  <p>L'unica a tentare di salvare ciò che restava fu la sorella, che sacrificò ogni risparmio per pagare avvocati e uomini corrotti. James assistette impotente al crollo definitivo. Capì che restare avrebbe significato essere trascinato verso il fondo insieme al resto della famiglia. <strong>Senza salutare quasi nessuno</strong>, prese poche cose e tornò sulla strada.</p>
+  <p>Negli anni successivi lavorò ovunque potesse: treni, stalle, saloon, come assistente per medici itineranti. Col tempo imparò a curare ferite da arma da fuoco, suturare tagli profondi e assistere uomini in condizioni disperate. La gente iniziò a chiamarlo <strong>"Doc"</strong>, un soprannome che inizialmente odiava ma che col tempo finì per accettare.</p>
+</section>
+
+<!-- TIMELINE -->
+<section class="section reveal" id="timeline">
+  <div class="section-label">Cronologia</div>
+  <h2 class="section-title">Gli <em>Eventi</em> Chiave</h2>
+  <div>
+    <div class="tl-item"><div class="tl-year">12 Set. 1863</div><div class="tl-content"><p>Nasce a Deadwood, Dakota Territory. Cresce in una fattoria con due fratelli maggiori e una sorella minore, figlio del severo William e della dolce Eleanor.</p></div></div>
+    <div class="tl-item"><div class="tl-year">Circa 1876</div><div class="tl-content"><p>A tredici anni lascia la fattoria. Comincia a lavorare sui treni mercantili come semplice aiutante, aprendo la porta a un mondo completamente diverso.</p></div></div>
+    <div class="tl-item"><div class="tl-year">1876 – 1883</div><div class="tl-content"><p>Anni di viaggio attraverso l'ovest americano. Assiste medici itineranti sui treni, impara le basi della medicina sul campo e sviluppa la capacità di mantenere il controllo nelle situazioni più difficili.</p></div></div>
+    <div class="tl-item"><div class="tl-year">Anni '80</div><div class="tl-content"><p>Ritorna a Deadwood per la morte del padre. Assiste al crollo progressivo della famiglia: la madre che perde la ragione, il fratello arrestato per rapina, la sorella che si sacrifica inutilmente.</p></div></div>
+    <div class="tl-item"><div class="tl-year">Dopo il crollo</div><div class="tl-content"><p>Lascia definitivamente la fattoria. Inizia a girare il West come medico autonomo. La gente comincia a chiamarlo "Doc". Impara a sopravvivere e a non legarsi a nessuno.</p></div></div>
+    <div class="tl-item"><div class="tl-year">Oggi</div><div class="tl-content"><p>Continua a viaggiare in cerca di una città tranquilla dove fermarsi. Porta con sé la sua borsa da medico, il peso del cognome Cartwright e la speranza silenziosa di una vita finalmente in pace.</p></div></div>
+  </div>
+</section>
+
+<!-- OBIETTIVI -->
+<section class="section reveal" id="obiettivi">
+  <div class="section-label">Motivazioni</div>
+  <h2 class="section-title">Obiettivi <em>&</em> Ambizioni</h2>
+  <div>
+    <div class="obj-item"><span class="obj-num">01</span><span class="obj-text">Trovare una città stabile dove costruirsi una nuova vita lontano dal caos dell'ovest.</span></div>
+    <div class="obj-item"><span class="obj-num">02</span><span class="obj-text">Guadagnarsi rispetto come medico e uomo affidabile, al di là del cognome che porta.</span></div>
+    <div class="obj-item"><span class="obj-num">03</span><span class="obj-text">Lasciarsi alle spalle il nome della famiglia Cartwright e i fantasmi che si porta dietro.</span></div>
+    <div class="obj-item"><span class="obj-num">04</span><span class="obj-text">Aiutare le persone per dare un senso agli errori del passato e al dolore vissuto.</span></div>
+    <div class="obj-item"><span class="obj-num">05</span><span class="obj-text">Accumulare abbastanza denaro da non dover più vivere di viaggio in viaggio.</span></div>
+    <div class="obj-item"><span class="obj-num">06</span><span class="obj-text">Evitare di ricadere nel caos e nella miseria che hanno distrutto la sua famiglia.</span></div>
+  </div>
+</section>
+
+<footer>
+  Red Dead Redemption II — Roleplay &nbsp;·&nbsp; James "Doc" Cartwright &nbsp;·&nbsp; Civile / Legale
+</footer>
+
+<script>
+// ── PARTICLE DUST BACKGROUND ──
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles, stars;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function initStars() {
+    stars = Array.from({ length: 120 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H * 0.6,
+      r: randomBetween(0.3, 1.4),
+      a: randomBetween(0.2, 0.7),
+      flicker: randomBetween(0.003, 0.012),
+      phase: Math.random() * Math.PI * 2
+    }));
+  }
+
+  function initParticles() {
+    particles = Array.from({ length: 55 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: randomBetween(-0.08, 0.08),
+      vy: randomBetween(-0.15, -0.04),
+      r: randomBetween(0.5, 2.2),
+      a: randomBetween(0.04, 0.18),
+      life: Math.random()
+    }));
+  }
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Sky gradient — warm dark brown to near-black
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0,   '#0e0a04');
+    sky.addColorStop(0.4, '#1a1005');
+    sky.addColorStop(1,   '#221506');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+
+    // Subtle warm glow at horizon
+    const hor = ctx.createRadialGradient(W * 0.5, H * 0.72, 0, W * 0.5, H * 0.72, W * 0.55);
+    hor.addColorStop(0,   'rgba(180,100,30,0.10)');
+    hor.addColorStop(0.5, 'rgba(140,70,20,0.05)');
+    hor.addColorStop(1,   'transparent');
+    ctx.fillStyle = hor;
+    ctx.fillRect(0, 0, W, H);
+
+    // Stars
+    t += 0.01;
+    for (const s of stars) {
+      const alpha = s.a * (0.7 + 0.3 * Math.sin(t * s.flicker * 60 + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,240,200,${alpha})`;
+      ctx.fill();
+    }
+
+    // Dust / ember particles
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life += 0.003;
+      if (p.life > 1) {
+        p.x = Math.random() * W;
+        p.y = H + 10;
+        p.life = 0;
+        p.a = randomBetween(0.04, 0.18);
+        p.vy = randomBetween(-0.15, -0.04);
+        p.vx = randomBetween(-0.08, 0.08);
+      }
+      const fade = p.life < 0.1 ? p.life / 0.1 : p.life > 0.85 ? (1 - p.life) / 0.15 : 1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(210,160,60,${p.a * fade})`;
+      ctx.fill();
+    }
+
+    // Horizontal ground line glow
+    const ground = ctx.createLinearGradient(0, H * 0.75, 0, H * 0.78);
+    ground.addColorStop(0, 'rgba(160,90,20,0.08)');
+    ground.addColorStop(1, 'transparent');
+    ctx.fillStyle = ground;
+    ctx.fillRect(0, H * 0.75, W, H * 0.03);
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); initStars(); initParticles(); });
+  resize(); initStars(); initParticles(); draw();
+})();
+
+// ── SCROLL REVEAL ──
+(function() {
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
