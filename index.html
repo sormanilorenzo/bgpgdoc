@@ -3,624 +3,1213 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>James "Doc" Cartwright</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<title>Diario — James "Doc" Cartwright</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg:        #1a1308;
-  --bg2:       #221a0a;
-  --line:      rgba(210,175,100,0.22);
-  --gold:      #d4a84b;
-  --gold-dim:  #9a7535;
-  --gold-glow: rgba(212,168,75,0.15);
-  --text:      #f0e6cc;
-  --text-dim:  #b8a882;
-  --text-mid:  #d4c4a0;
-  --red:       #8b2a1a;
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#F2E8D0;
+  --cream2:#E8DBC0;
+  --ink:#1C120A;
+  --ink2:#3D2B16;
+  --ink3:#6B4C2A;
+  --gold:#B8861C;
+  --gold2:#D4A84B;
+  --red:#8B2A1A;
+  --brown:#5C3B1A;
+  --shadow:rgba(20,10,4,.55);
+  --paper:#F5EDD8;
+  --paper2:#EDE3C8;
+  --line:rgba(139,100,50,.18);
 }
 
-html { scroll-behavior: smooth; }
-
-body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: 'Crimson Pro', Georgia, serif;
-  font-size: 18px;
-  line-height: 1.8;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+html{scroll-behavior:smooth}
+body{
+  background:#0f0a04;
+  font-family:'IM Fell English',Georgia,serif;
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
 }
 
-/* ── CANVAS BACKGROUND ── */
-#bg-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+/* ══════════════════════════════════════
+   WESTERN BACKGROUND PATTERN
+══════════════════════════════════════ */
+#bg-canvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+}
+.bg-pattern{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:0.055;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 38px,rgba(180,140,60,.6) 38px,rgba(180,140,60,.6) 39px),
+    repeating-linear-gradient(90deg,transparent,transparent 38px,rgba(180,140,60,.6) 38px,rgba(180,140,60,.6) 39px);
 }
 
-/* everything on top of canvas */
-nav, .hero, .section, footer { position: relative; z-index: 1; }
-
-/* ── NAV ── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  gap: 36px;
-  padding: 18px 40px;
-  background: linear-gradient(to bottom, rgba(26,19,8,0.97) 60%, transparent);
-  backdrop-filter: blur(2px);
+/* ══════════════════════════════════════
+   TITLE SCREEN
+══════════════════════════════════════ */
+#title-screen{
+  position:fixed;inset:0;z-index:500;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 45%, #2a1a06 0%, #0f0a04 70%);
+  cursor:pointer;
+  transition:opacity .8s ease;
 }
+#title-screen.fade-out{opacity:0;pointer-events:none}
 
-nav a {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-decoration: none;
-  transition: color 0.3s, text-shadow 0.3s;
+.ts-top{
+  font-family:'Special Elite',monospace;
+  font-size:10px;letter-spacing:6px;color:rgba(180,140,60,.5);
+  text-transform:uppercase;margin-bottom:40px;
 }
-nav a:hover {
-  color: var(--gold);
-  text-shadow: 0 0 20px rgba(212,168,75,0.5);
+.ts-logo{
+  width:clamp(80px,12vw,130px);height:auto;opacity:.9;margin-bottom:30px;
+  filter:drop-shadow(0 0 20px rgba(180,130,40,.4));
 }
+.ts-name{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(52px,8vw,110px);font-weight:400;
+  color:#F2E0B0;line-height:1;letter-spacing:-1px;
+  text-shadow:0 2px 40px rgba(180,130,40,.35);
+  margin-bottom:8px;
+}
+.ts-alias{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(20px,3vw,36px);font-style:italic;
+  color:var(--gold2);margin-bottom:50px;
+  text-shadow:0 0 30px rgba(180,130,40,.5);
+}
+.ts-rule{
+  width:200px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(180,130,40,.5),transparent);
+  margin-bottom:30px;
+}
+.ts-subtitle{
+  font-family:'Special Elite',monospace;
+  font-size:11px;letter-spacing:4px;color:rgba(180,140,60,.45);
+  text-transform:uppercase;margin-bottom:60px;
+}
+.ts-cta{
+  font-family:'Special Elite',monospace;
+  font-size:11px;letter-spacing:5px;color:rgba(180,140,60,.35);
+  text-transform:uppercase;
+  animation:blink 2.2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:.8}}
 
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 120px 40px 80px;
-  border-bottom: 1px solid var(--line);
-}
+/* ornament corners */
+.corner{position:absolute;width:60px;height:60px;opacity:.35}
+.corner svg{width:100%;height:100%}
+.corner.tl{top:24px;left:24px}
+.corner.tr{top:24px;right:24px;transform:scaleX(-1)}
+.corner.bl{bottom:24px;left:24px;transform:scaleY(-1)}
+.corner.br{bottom:24px;right:24px;transform:scale(-1)}
 
-.hero-eyebrow {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  margin-bottom: 28px;
-  opacity: 0;
-  animation: fadeUp 0.9s ease 0.1s forwards;
-}
-
-.hero-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(60px, 9vw, 116px);
-  font-weight: 300;
-  line-height: 1;
-  color: var(--text);
-  letter-spacing: -1px;
-  margin-bottom: 10px;
-  text-shadow: 0 0 80px rgba(212,168,75,0.2);
-  opacity: 0;
-  animation: fadeUp 0.9s ease 0.25s forwards;
-}
-
-.hero-alias {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(22px, 3.5vw, 38px);
-  font-weight: 300;
-  font-style: italic;
-  color: var(--gold);
-  margin-bottom: 52px;
-  text-shadow: 0 0 40px rgba(212,168,75,0.35);
-  opacity: 0;
-  animation: fadeUp 0.9s ease 0.4s forwards;
+/* ══════════════════════════════════════
+   MAIN WRAPPER
+══════════════════════════════════════ */
+#app{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;
+  padding:0 0 60px;
 }
 
-.hero-line {
-  width: 1px;
-  height: 70px;
-  background: linear-gradient(to bottom, var(--gold), transparent);
-  margin: 0 auto 52px;
-  opacity: 0;
-  animation: fadeIn 1s ease 0.55s forwards;
+/* ══════════════════════════════════════
+   TOP BAR
+══════════════════════════════════════ */
+.top-bar{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:24px;
+  padding:16px 32px;
+  background:linear-gradient(to bottom,rgba(15,10,4,.97) 60%,transparent);
+  position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(3px);
+}
+.top-bar-title{
+  font-family:'Special Elite',monospace;
+  font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(180,140,60,.5);
+}
+.tb-btn{
+  font-family:'Special Elite',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(180,140,60,.45);
+  background:none;border:1px solid rgba(180,140,60,.2);
+  padding:6px 14px;cursor:pointer;
+  transition:all .2s;
+}
+.tb-btn:hover{color:var(--gold2);border-color:rgba(180,140,60,.5);background:rgba(180,140,60,.05)}
+.tb-sep{width:1px;height:18px;background:rgba(180,140,60,.15)}
+
+/* ══════════════════════════════════════
+   SCENE & BOOK
+══════════════════════════════════════ */
+.scene-wrap{
+  display:flex;align-items:center;justify-content:center;
+  padding:40px 20px 20px;
+  flex:1;
+}
+.scene{
+  perspective:2400px;perspective-origin:50% 46%;
+  --pg-h:min(86vh,760px);
+  --pg-w:calc(var(--pg-h)/1.4142);
+  width:calc(var(--pg-w)*2);
+  height:var(--pg-h);
+  position:relative;
+  transition:transform .7s cubic-bezier(.4,0,.2,1);
+}
+.scene.closed-view{transform:translateX(calc(var(--pg-w) / -2))}
+
+.book{
+  width:100%;height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform .9s cubic-bezier(.4,0,.2,1);
+  transform:rotateY(-5deg) rotateX(2deg);
+}
+.book.closed{transform:rotateY(-20deg) rotateX(6deg);cursor:pointer}
+
+.page{
+  position:absolute;width:50%;height:100%;right:0;
+  transform-origin:left center;transform-style:preserve-3d;
+  transition:transform .85s cubic-bezier(.4,0,.2,1);
+  z-index:1;cursor:grab;
+}
+.page:active{cursor:grabbing}
+.page.flipped{transform:rotateY(-180deg)}
+.page.dragging{transition:none!important;z-index:50!important}
+
+.page-front,.page-back{
+  position:absolute;width:100%;height:100%;
+  backface-visibility:hidden;overflow:visible;
+}
+#book img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
+#book *{user-select:none;-webkit-user-select:none}
+.page-front{z-index:2;border-radius:0 3px 3px 0}
+.page-back{transform:rotateY(180deg);z-index:1;border-radius:3px 0 0 3px}
+
+.page[data-page="0"]{z-index:30}.page[data-page="1"]{z-index:29}
+.page[data-page="2"]{z-index:28}.page[data-page="3"]{z-index:27}
+.page[data-page="4"]{z-index:26}.page[data-page="5"]{z-index:25}
+.page[data-page="6"]{z-index:24}.page[data-page="7"]{z-index:23}
+.page[data-page="8"]{z-index:22}.page[data-page="9"]{z-index:21}
+.page[data-page="10"]{z-index:20}.page[data-page="11"]{z-index:19}
+.page[data-page="12"]{z-index:18}.page[data-page="13"]{z-index:17}
+.page[data-page="14"]{z-index:16}.page[data-page="15"]{z-index:15}
+.page[data-page="16"]{z-index:14}.page[data-page="17"]{z-index:13}
+.page[data-page="18"]{z-index:12}.page[data-page="19"]{z-index:11}
+.page[data-page="20"]{z-index:10}.page[data-page="21"]{z-index:9}
+.page.flipped[data-page="0"]{z-index:9}.page.flipped[data-page="1"]{z-index:10}
+.page.flipped[data-page="2"]{z-index:11}.page.flipped[data-page="3"]{z-index:12}
+.page.flipped[data-page="4"]{z-index:13}.page.flipped[data-page="5"]{z-index:14}
+.page.flipped[data-page="6"]{z-index:15}.page.flipped[data-page="7"]{z-index:16}
+.page.flipped[data-page="8"]{z-index:17}.page.flipped[data-page="9"]{z-index:18}
+.page.flipped[data-page="10"]{z-index:19}.page.flipped[data-page="11"]{z-index:20}
+.page.flipped[data-page="12"]{z-index:21}.page.flipped[data-page="13"]{z-index:22}
+.page.flipped[data-page="14"]{z-index:23}.page.flipped[data-page="15"]{z-index:24}
+.page.flipped[data-page="16"]{z-index:25}.page.flipped[data-page="17"]{z-index:26}
+.page.flipped[data-page="18"]{z-index:27}.page.flipped[data-page="19"]{z-index:28}
+.page.flipped[data-page="20"]{z-index:29}.page.flipped[data-page="21"]{z-index:30}
+
+/* ══ SPINE ══ */
+.book-spine{
+  position:absolute;left:50%;top:0;width:16px;height:100%;
+  transform:translateX(-50%);z-index:40;pointer-events:none;
+  background:linear-gradient(90deg,#2a1506,#4a2a0e,#2a1506);
+  box-shadow:0 0 20px rgba(0,0,0,.6);
 }
 
-.hero-meta {
-  display: flex;
-  gap: 60px;
-  flex-wrap: wrap;
-  justify-content: center;
-  opacity: 0;
-  animation: fadeUp 0.9s ease 0.65s forwards;
+/* ══ COVER ══ */
+.cover-face{
+  border:none;
+  background-color:#3D1C06;
+  background-image:
+    repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,.015) 2px,rgba(255,255,255,.015) 4px),
+    repeating-linear-gradient(-45deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);
+  box-shadow:inset 0 0 80px rgba(0,0,0,.3),8px 0 30px rgba(0,0,0,.6);
+}
+.cover-face::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(155deg,rgba(255,255,255,.07) 0%,transparent 45%,rgba(0,0,0,.15) 100%);
+}
+.cover-back{border-radius:3px 0 0 3px!important}
+
+/* cover inner layout */
+.cover-inner{
+  position:relative;z-index:1;
+  height:100%;display:flex;flex-direction:column;align-items:center;
+  padding:28px 28px 24px;
+}
+.c-top{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;
+  margin-bottom:10px;
+}
+.c-eyebrow{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(6px,.65vw,8px);letter-spacing:4px;text-transform:uppercase;
+  color:rgba(220,185,100,.45);
+}
+.c-logo{
+  width:clamp(44px,5.5vw,70px);height:auto;opacity:.88;
+  filter:drop-shadow(0 0 10px rgba(180,130,40,.3));
+}
+.c-rule{
+  width:55%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,160,80,.35),transparent);
+}
+.c-img-wrap{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  width:100%;padding:8px 20px;overflow:hidden;
+}
+.c-img{
+  max-width:100%;max-height:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 4px 16px rgba(0,0,0,.5));
+}
+.c-text{
+  width:100%;
+  border-left:2px solid rgba(200,160,70,.3);
+  padding-left:16px;
+  margin-bottom:12px;
+}
+.c-lbl{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(6px,.6vw,8px);letter-spacing:3px;text-transform:uppercase;
+  color:rgba(200,160,70,.45);
+  margin-top:12px;margin-bottom:2px;
+}
+.c-lbl:first-child{margin-top:0}
+.c-val{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(16px,2.2vw,26px);color:rgba(242,224,176,.95);
+  letter-spacing:.04em;line-height:1.2;
+  text-shadow:0 2px 12px rgba(0,0,0,.6);
+}
+.c-val.sm{font-size:clamp(11px,1.4vw,16px)}
+.c-bottom{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:5px;
+}
+.c-badge{
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(200,160,70,.2);
+  border-left:2px solid rgba(200,160,70,.45);
+  padding:4px 14px;
+  font-family:'Special Elite',monospace;
+  font-size:clamp(6px,.62vw,8px);letter-spacing:3px;
+  color:rgba(200,160,70,.65);text-transform:uppercase;
+  align-self:flex-start;white-space:nowrap;
+}
+.c-confid{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(5px,.5vw,7px);letter-spacing:2px;
+  color:rgba(200,160,70,.2);text-transform:uppercase;text-align:center;
 }
 
-.meta-item { text-align: center; }
-.meta-label {
-  font-size: 10px;
-  font-family: 'Cormorant Garamond', serif;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  display: block;
-  margin-bottom: 5px;
+/* backcover */
+.backcover-inner{
+  position:relative;z-index:1;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;padding:40px 30px;
 }
-.meta-value {
-  font-size: 15px;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: 0.5px;
+.bc-seal{
+  width:clamp(60px,8vw,90px);height:auto;opacity:.35;
+  filter:drop-shadow(0 0 8px rgba(180,130,40,.2));
+}
+.bc-text{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(7px,.7vw,9px);letter-spacing:4px;text-transform:uppercase;
+  color:rgba(200,160,70,.3);text-align:center;line-height:2;
 }
 
-/* ── REVEAL ON SCROLL ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.75s ease, transform 0.75s ease;
+/* ══ PAPER PAGES ══ */
+.paper-page{
+  background:var(--paper);
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(100,70,30,.09) 27px,rgba(100,70,30,.09) 28px);
+  box-shadow:inset -2px 0 8px rgba(0,0,0,.12),3px 0 14px rgba(0,0,0,.22);
 }
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── SECTIONS ── */
-.section {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 110px 40px;
-  border-bottom: 1px solid var(--line);
+.paper-page-left{
+  background:var(--paper);
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(100,70,30,.09) 27px,rgba(100,70,30,.09) 28px);
+  box-shadow:inset 2px 0 8px rgba(0,0,0,.1),-3px 0 12px rgba(0,0,0,.18);
 }
 
-.section-label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  margin-bottom: 48px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+/* ══ PAGE CONTENT ══ */
+.pg-scroll{
+  width:100%;height:100%;
+  overflow-y:auto;padding:28px 26px 20px;
+  position:relative;
 }
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--line);
+.pg-scroll::-webkit-scrollbar{width:3px}
+.pg-scroll::-webkit-scrollbar-thumb{background:rgba(100,70,30,.2)}
+
+.pg-date{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(8px,.8vw,10px);letter-spacing:3px;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:6px;
+  display:flex;align-items:center;gap:10px;
+}
+.pg-date::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,rgba(100,70,30,.25),transparent);
+}
+.pg-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(15px,1.9vw,22px);font-weight:700;
+  color:var(--ink);margin-bottom:4px;line-height:1.2;
+}
+.pg-title em{font-style:italic;color:var(--red)}
+.pg-subtitle{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(7px,.7vw,9px);letter-spacing:2px;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:16px;
+}
+.pg-rule{
+  width:100%;height:1px;margin-bottom:16px;
+  background:linear-gradient(90deg,rgba(100,70,30,.35),rgba(100,70,30,.1),transparent);
+}
+.pg-body{
+  font-family:'IM Fell English',Georgia,serif;
+  font-size:clamp(12px,1.25vw,14.5px);
+  line-height:1.85;color:var(--ink2);font-weight:400;
+}
+.pg-body p{margin-bottom:12px}
+.pg-body p:last-child{margin-bottom:0}
+.pg-body strong{color:var(--ink);font-weight:700}
+.pg-body em{font-style:italic;color:var(--ink3)}
+
+/* pull quote / nota */
+.pg-nota{
+  margin:14px 0;
+  padding:10px 14px;
+  border-left:2px solid rgba(139,42,26,.4);
+  background:rgba(139,42,26,.04);
+}
+.pg-nota p{
+  font-family:'Playfair Display',serif;
+  font-style:italic;font-size:clamp(11px,1.15vw,13px);
+  color:var(--red);line-height:1.6;margin:0;
 }
 
-.section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(34px, 5vw, 54px);
-  font-weight: 300;
-  line-height: 1.15;
-  color: var(--text);
-  margin-bottom: 44px;
-  letter-spacing: -0.5px;
+/* data table */
+.data-table{
+  width:100%;border-collapse:collapse;margin:12px 0;
 }
-.section-title em {
-  font-style: italic;
-  color: var(--gold);
+.data-table td{
+  font-family:'IM Fell English',Georgia,serif;
+  font-size:clamp(10px,1.05vw,12.5px);
+  padding:5px 0;
+  border-bottom:1px solid rgba(100,70,30,.12);
+  vertical-align:top;
 }
-
-p {
-  font-size: 17.5px;
-  line-height: 1.88;
-  color: var(--text-dim);
-  margin-bottom: 22px;
-  font-weight: 300;
-}
-p strong { color: var(--text-mid); font-weight: 400; }
-p:last-child { margin-bottom: 0; }
-
-/* ── DOSSIER TABLE ── */
-.dossier {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid var(--line);
-  margin-top: 48px;
-}
-.dossier-row {
-  padding: 18px 24px;
-  border-bottom: 1px solid var(--line);
-  border-right: 1px solid var(--line);
-  transition: background 0.3s;
-}
-.dossier-row:hover { background: rgba(212,168,75,0.05); }
-.dossier-row:nth-child(even) { border-right: none; }
-.dossier-row:nth-last-child(-n+2) { border-bottom: none; }
-
-.dossier-key {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  display: block;
-  margin-bottom: 4px;
-}
-.dossier-val {
-  font-size: 15px;
-  color: var(--text);
-  font-weight: 400;
+.data-table td:first-child{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(7px,.7vw,9px);letter-spacing:2px;text-transform:uppercase;
+  color:var(--ink3);width:38%;padding-right:12px;
 }
 
-/* ── TRAITS ── */
-.traits {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 36px;
+/* timeline entry */
+.tl-row{
+  display:grid;grid-template-columns:80px 1fr;
+  gap:10px 14px;padding:10px 0;
+  border-bottom:1px solid rgba(100,70,30,.1);
+  align-items:start;
 }
-.trait {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  border: 1px solid var(--line);
-  padding: 7px 16px;
-  transition: color 0.3s, border-color 0.3s, background 0.3s;
+.tl-row:last-child{border-bottom:none}
+.tl-yr{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(8px,.8vw,10px);letter-spacing:1px;
+  color:var(--red);padding-top:1px;line-height:1.4;
 }
-.trait:hover {
-  color: var(--gold);
-  border-color: var(--gold-dim);
-  background: rgba(212,168,75,0.07);
+.tl-txt{
+  font-family:'IM Fell English',Georgia,serif;
+  font-size:clamp(11px,1.1vw,13px);line-height:1.7;
+  color:var(--ink2);
 }
 
-/* ── PULL QUOTE ── */
-.pull-quote {
-  margin: 48px 0;
-  padding: 36px 0 36px 32px;
-  border-left: 2px solid var(--gold-dim);
-  position: relative;
-}
-.pull-quote::before {
-  content: '';
-  position: absolute;
-  left: -2px; top: 0; bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
-  animation: lineGlow 3s ease-in-out infinite;
-}
-.pull-quote p {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(20px, 3vw, 28px);
-  font-style: italic;
-  font-weight: 300;
-  color: var(--text);
-  line-height: 1.55;
-  margin: 0;
+/* stamp */
+.pg-stamp{
+  position:absolute;bottom:14px;right:18px;
+  opacity:.12;transform:rotate(-8deg);
+  font-family:'Special Elite',monospace;
+  font-size:clamp(9px,.9vw,11px);letter-spacing:3px;text-transform:uppercase;
+  color:var(--red);border:2px solid var(--red);
+  padding:4px 10px;pointer-events:none;
 }
 
-@keyframes lineGlow {
-  0%, 100% { opacity: 0.6; }
-  50%       { opacity: 1; }
+/* page number */
+.pg-num{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  font-family:'Special Elite',monospace;
+  font-size:9px;letter-spacing:2px;color:rgba(100,70,30,.35);
 }
 
-/* ── TIMELINE ── */
-.tl-item {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 32px;
-  padding: 34px 0;
-  border-bottom: 1px solid var(--line);
-  align-items: start;
-  transition: background 0.3s;
-}
-.tl-item:hover { background: rgba(212,168,75,0.03); }
-.tl-item:first-child { padding-top: 0; }
-.tl-item:last-child { border-bottom: none; }
-
-.tl-year {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  color: var(--gold);
-  padding-top: 2px;
-  line-height: 1.4;
-}
-.tl-content p { font-size: 16px; margin: 0; }
-
-/* ── OBJECTIVES ── */
-.obj-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 22px;
-  padding: 24px 0;
-  border-bottom: 1px solid var(--line);
-  transition: padding-left 0.3s;
-}
-.obj-item:hover { padding-left: 8px; }
-.obj-item:last-child { border-bottom: none; }
-
-.obj-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--gold-dim);
-  letter-spacing: 1px;
-  flex-shrink: 0;
-  padding-top: 3px;
-  width: 28px;
-}
-.obj-text {
-  font-size: 16.5px;
-  color: var(--text-dim);
-  line-height: 1.75;
-  font-weight: 300;
+/* hint arrows */
+.hint-line{
+  font-family:'Special Elite',monospace;
+  font-size:9px;letter-spacing:2px;
+  color:rgba(180,140,60,.25);text-align:center;
+  margin-top:10px;
 }
 
-/* ── FOOTER ── */
-footer {
-  text-align: center;
-  padding: 60px 40px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  position: relative;
-  z-index: 1;
+/* indicator */
+.foot-indicator{
+  font-family:'Special Elite',monospace;
+  font-size:9px;letter-spacing:3px;
+  color:rgba(180,140,60,.35);min-width:80px;text-align:center;
 }
 
-/* ── KEYFRAMES ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* ── RESPONSIVE ── */
-@media (max-width: 640px) {
-  nav { gap: 18px; padding: 14px 20px; }
-  .section { padding: 70px 24px; }
-  .dossier { grid-template-columns: 1fr; }
-  .dossier-row { border-right: none; }
-  .dossier-row:nth-last-child(-n+2) { border-bottom: 1px solid var(--line); }
-  .dossier-row:last-child { border-bottom: none; }
-  .tl-item { grid-template-columns: 1fr; gap: 6px; }
-  .hero-meta { gap: 24px; }
+/* ══ RESPONSIVE ══ */
+@media(max-width:640px){
+  .top-bar{gap:12px;padding:12px 16px}
+  .scene-wrap{padding:24px 8px 16px}
+  .pg-scroll{padding:18px 16px 14px}
 }
 </style>
 </head>
 <body>
 
-<!-- ANIMATED BACKGROUND -->
+<!-- BG -->
 <canvas id="bg-canvas"></canvas>
+<div class="bg-pattern"></div>
 
-<nav>
-  <a href="#profilo">Profilo</a>
-  <a href="#carattere">Carattere</a>
-  <a href="#storia">Storia</a>
-  <a href="#timeline">Cronologia</a>
-  <a href="#obiettivi">Obiettivi</a>
-</nav>
+<!-- TITLE SCREEN -->
+<div id="title-screen" onclick="enterApp()">
+  <div class="corner tl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 2 L2 20 M2 2 L20 2" stroke="#B8861C" stroke-width="2"/><circle cx="2" cy="2" r="3" fill="#B8861C" opacity=".6"/></svg></div>
+  <div class="corner tr"><svg viewBox="0 0 60 60" fill="none"><path d="M2 2 L2 20 M2 2 L20 2" stroke="#B8861C" stroke-width="2"/><circle cx="2" cy="2" r="3" fill="#B8861C" opacity=".6"/></svg></div>
+  <div class="corner bl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 2 L2 20 M2 2 L20 2" stroke="#B8861C" stroke-width="2"/><circle cx="2" cy="2" r="3" fill="#B8861C" opacity=".6"/></svg></div>
+  <div class="corner br"><svg viewBox="0 0 60 60" fill="none"><path d="M2 2 L2 20 M2 2 L20 2" stroke="#B8861C" stroke-width="2"/><circle cx="2" cy="2" r="3" fill="#B8861C" opacity=".6"/></svg></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-eyebrow">Red Dead Redemption — Roleplay</div>
-  <h1 class="hero-name">James Cartwright</h1>
-  <div class="hero-alias">"Doc"</div>
-  <div class="hero-line"></div>
-  <div class="hero-meta">
-    <div class="meta-item">
-      <span class="meta-label">Nato il</span>
-      <span class="meta-value">12 Settembre 1863</span>
+  <div class="ts-top">Red Dead Redemption — Roleplay</div>
+  <img src="image/logo.png" class="ts-logo" alt="" onerror="this.style.display='none'">
+  <div class="ts-name">James Cartwright</div>
+  <div class="ts-alias">"Doc"</div>
+  <div class="ts-rule"></div>
+  <div class="ts-subtitle">Diario Personale · 1863 – Presente</div>
+  <div class="ts-cta">— clicca per aprire —</div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <button class="tb-btn" onclick="prevPage()">← Indietro</button>
+    <div class="tb-sep"></div>
+    <span class="top-bar-title">Diario · James "Doc" Cartwright</span>
+    <div class="tb-sep"></div>
+    <span class="foot-indicator" id="page-indicator">—</span>
+    <div class="tb-sep"></div>
+    <button class="tb-btn" onclick="nextPage()">Avanti →</button>
+  </div>
+
+  <div class="scene-wrap">
+    <div class="scene closed-view" id="book-scene">
+      <div id="book" class="book closed">
+        <div class="book-spine"></div>
+      </div>
     </div>
-    <div class="meta-item">
-      <span class="meta-label">Luogo di nascita</span>
-      <span class="meta-value">Deadwood, Dakota Territory</span>
-    </div>
-    <div class="meta-item">
-      <span class="meta-label">Professione</span>
-      <span class="meta-value">Capo Treno / Commerciante</span>
-    </div>
-    <div class="meta-item">
-      <span class="meta-label">Tipologia</span>
-      <span class="meta-value">Civile — Legale</span>
-    </div>
   </div>
-</section>
-
-<!-- PROFILO -->
-<section class="section reveal" id="profilo">
-  <div class="section-label">Dossier</div>
-  <h2 class="section-title">Profilo <em>Identificativo</em></h2>
-  <div class="dossier">
-    <div class="dossier-row"><span class="dossier-key">Nome completo</span><span class="dossier-val">James William Cartwright</span></div>
-    <div class="dossier-row"><span class="dossier-key">Soprannome</span><span class="dossier-val">"Doc"</span></div>
-    <div class="dossier-row"><span class="dossier-key">Data di nascita</span><span class="dossier-val">12 Settembre 1863</span></div>
-    <div class="dossier-row"><span class="dossier-key">Luogo di nascita</span><span class="dossier-val">Deadwood, Dakota Territory</span></div>
-    <div class="dossier-row"><span class="dossier-key">Padre</span><span class="dossier-val">William Cartwright †</span></div>
-    <div class="dossier-row"><span class="dossier-key">Madre</span><span class="dossier-val">Eleanor Cartwright</span></div>
-    <div class="dossier-row"><span class="dossier-key">Tipologia RP</span><span class="dossier-val">Civile / Legale</span></div>
-    <div class="dossier-row"><span class="dossier-key">Professione</span><span class="dossier-val">Capo Treno / Commerciante itinerante</span></div>
-  </div>
-  <div class="traits">
-    <span class="trait">Silenzioso</span><span class="trait">Riflessivo</span><span class="trait">Freddo</span>
-    <span class="trait">Disciplinato</span><span class="trait">Metodico</span><span class="trait">Paziente</span>
-    <span class="trait">Osservatore</span><span class="trait">Realistico</span><span class="trait">Distaccato</span>
-  </div>
-</section>
-
-<!-- CARATTERE -->
-<section class="section reveal" id="carattere">
-  <div class="section-label">Carattere</div>
-  <h2 class="section-title">Profilo <em>Psicologico</em></h2>
-  <p>James Cartwright è un uomo <strong>silenzioso, riflessivo e difficile da leggere</strong>. Cresciuto nel duro ambiente del Far West, ha imparato presto che la calma vale più di una pistola e che spesso chi perde il controllo perde anche la vita. È raro vederlo agitato: anche nelle situazioni peggiori mantiene sangue freddo e lucidità, qualità che negli anni gli hanno fatto guadagnare il soprannome di "Doc".</p>
-  <div class="pull-quote">
-    <p>Quel nome non nasce dalla medicina, ma dal modo in cui affronta i problemi. Quando gli altri urlano, lui ragiona. Quando gli altri tremano, lui resta fermo.</p>
-  </div>
-  <p>James tende a non legarsi troppo alle persone. Ha visto troppe famiglie distruggersi e troppi uomini perdere tutto per fidarsi facilmente degli altri. Non ama parlare del proprio passato e raramente racconta qualcosa della sua famiglia. Preferisce ascoltare piuttosto che parlare, osservare piuttosto che intervenire.</p>
-  <p>È <strong>metodico, disciplinato e molto paziente</strong>. Gli anni passati sui treni gli hanno insegnato a leggere le persone, a capire quando qualcuno mente o quando sta per succedere qualcosa di brutto. Non ama la violenza e cerca sempre di evitare problemi inutili. Non è un uomo coraggioso nel senso classico del termine: davanti a rapine o assalti preferisce mantenere un atteggiamento realistico, pensando prima a sopravvivere che a fare l'eroe.</p>
-</section>
-
-<!-- STORIA -->
-<section class="section reveal" id="storia">
-  <div class="section-label">Storia</div>
-  <h2 class="section-title">Il Passato di <em>James</em></h2>
-  <p>James Cartwright nacque il 12 settembre del 1863 in una piccola fattoria vicino a Deadwood, nel Dakota Territory. La sua famiglia viveva di allevamento e agricoltura, conducendo una vita dura ma onesta. Suo padre, <strong>William Cartwright</strong>, era un uomo severo che aveva costruito tutto con anni di sacrifici, mentre sua madre <strong>Eleanor</strong> era una donna gentile e molto religiosa. James crebbe insieme a due fratelli maggiori e una sorella minore, imparando presto il valore del lavoro.</p>
-  <p>Fin da bambino sviluppò una forte curiosità verso il mondo oltre la fattoria. Rimaneva affascinato dai racconti dei viaggiatori e soprattutto dalle locomotive che attraversavano il territorio. Mentre gli altri ragazzi sognavano pistole e cavalli, lui passava ore ad osservare i treni e i mercanti che trasportavano merci da una parte all'altra del paese.</p>
-  <p>A <strong>tredici anni</strong> lasciò la fattoria per iniziare a lavorare sui treni mercantili. Cominciò dal basso: puliva vagoni, caricava casse, aiutava i macchinisti e svolgeva qualsiasi lavoro necessario. Con il tempo imparò a conoscere le rotte commerciali, il trasporto merci e tutta la logistica legata ai commerci ferroviari.</p>
-  <p>Per anni attraversò gli Stati Uniti viaggiando continuamente da una città all'altra. Vide nascere insediamenti dal nulla, commercianti arricchirsi in pochi mesi e uomini perdere tutto in una sola notte. I treni diventarono la sua vera casa e i lavoratori ferroviari la sua nuova famiglia.</p>
-  <p>Tornò alla fattoria soltanto dopo aver ricevuto notizia della <strong>morte del padre</strong>. William era rimasto vittima di un incidente durante una tempesta e la famiglia iniziò lentamente a crollare. Sua madre subì un forte crollo nervoso e il nome dei Cartwright, un tempo rispettato, iniziò a diventare motivo di vergogna nella zona. La situazione peggiorò ulteriormente quando uno dei fratelli venne arrestato per una rapina.</p>
-  <p>L'unica a tentare di salvare ciò che restava della famiglia fu la sorella, che spese tutto ciò che aveva pur di aiutare il fratello. James assistette impotente alla distruzione della propria casa e capì che restare avrebbe soltanto peggiorato le cose.</p>
-  <p>Così lasciò nuovamente Deadwood e tornò sulla strada. Negli anni successivi lavorò principalmente nel trasporto merci, nell'import/export e nel commercio itinerante. Trasportava minerali, carne, pelli e qualsiasi altra merce potesse avere valore nelle città di frontiera. Col tempo imparò a gestire uomini, carichi e commerci, diventando un uomo affidabile nel settore ferroviario.</p>
-</section>
-
-<!-- TIMELINE -->
-<section class="section reveal" id="timeline">
-  <div class="section-label">Cronologia</div>
-  <h2 class="section-title">Gli <em>Eventi</em> Chiave</h2>
-  <div>
-    <div class="tl-item"><div class="tl-year">12 Set. 1863</div><div class="tl-content"><p>Nasce a Deadwood, Dakota Territory. Cresce in una fattoria con due fratelli maggiori e una sorella minore, figlio del severo William e della dolce Eleanor.</p></div></div>
-    <div class="tl-item"><div class="tl-year">Circa 1876</div><div class="tl-content"><p>A tredici anni lascia la fattoria. Comincia a lavorare sui treni mercantili come semplice aiutante, aprendo la porta a un mondo completamente diverso.</p></div></div>
-    <div class="tl-item"><div class="tl-year">1876 – 1883</div><div class="tl-content"><p>Anni di viaggio attraverso l'ovest americano. Impara le rotte commerciali, il trasporto merci e la logistica ferroviaria. I treni diventano la sua vera casa.</p></div></div>
-    <div class="tl-item"><div class="tl-year">Anni '80</div><div class="tl-content"><p>Ritorna a Deadwood per la morte del padre. Assiste al crollo progressivo della famiglia: la madre che perde la ragione, il fratello arrestato per rapina, la sorella che si sacrifica inutilmente.</p></div></div>
-    <div class="tl-item"><div class="tl-year">Dopo il crollo</div><div class="tl-content"><p>Lascia definitivamente Deadwood. Torna sulla strada lavorando nel trasporto merci, nell'import/export e nel commercio itinerante. Diventa un uomo affidabile nel settore ferroviario.</p></div></div>
-    <div class="tl-item"><div class="tl-year">Oggi</div><div class="tl-content"><p>Continua a viaggiare in cerca di una città tranquilla dove fermarsi. Porta con sé l'esperienza di anni sui treni, il peso del cognome Cartwright e la speranza silenziosa di una vita finalmente in pace.</p></div></div>
-  </div>
-</section>
-
-<!-- OBIETTIVI -->
-<section class="section reveal" id="obiettivi">
-  <div class="section-label">Motivazioni</div>
-  <h2 class="section-title">Obiettivi <em>&</em> Ambizioni</h2>
-  <div>
-    <div class="obj-item"><span class="obj-num">01</span><span class="obj-text">Costruirsi una nuova vita attraverso il commercio e il lavoro ferroviario.</span></div>
-    <div class="obj-item"><span class="obj-num">02</span><span class="obj-text">Gestire attività legate al trasporto merci e all'import/export.</span></div>
-    <div class="obj-item"><span class="obj-num">03</span><span class="obj-text">Guadagnarsi rispetto come uomo affidabile e lavoratore serio.</span></div>
-    <div class="obj-item"><span class="obj-num">04</span><span class="obj-text">Lasciarsi alle spalle il nome della famiglia Cartwright.</span></div>
-    <div class="obj-item"><span class="obj-num">05</span><span class="obj-text">Accumulare abbastanza denaro da smettere di vivere continuamente in viaggio.</span></div>
-    <div class="obj-item"><span class="obj-num">06</span><span class="obj-text">Evitare il mondo criminale e vivere una vita il più possibile tranquilla.</span></div>
-  </div>
-</section>
-
-<footer>
-  Red Dead Redemption II — Roleplay &nbsp;·&nbsp; James "Doc" Cartwright &nbsp;·&nbsp; Capo Treno / Civile / Legale
-</footer>
+  <div class="hint-line" id="hint-line">clicca sulla copertina per aprire · trascina le pagine per sfogliare</div>
+</div>
 
 <script>
-// ── PARTICLE DUST BACKGROUND ──
-(function() {
+(function(){
+'use strict';
+
+/* ══════════ PAGES DATA ══════════ */
+const PAGES = [
+  // [front_content, back_content]
+  // page[0] = cover / scheda anagrafica
+  // page[1..N-1] = inner pages
+  // page[last] = back cover
+
+  // ── PAGE 1: Anagrafica (front) + Nota introduttiva (back)
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Dossier · Anagrafica</div>
+      <div class="pg-title">Profilo <em>Identificativo</em></div>
+      <div class="pg-rule"></div>
+      <table class="data-table">
+        <tr><td>Nome completo</td><td>James William Cartwright</td></tr>
+        <tr><td>Soprannome</td><td>"Doc"</td></tr>
+        <tr><td>Data di nascita</td><td>12 Settembre 1863</td></tr>
+        <tr><td>Luogo di nascita</td><td>Deadwood, Dakota Territory</td></tr>
+        <tr><td>Padre</td><td>William Cartwright †</td></tr>
+        <tr><td>Madre</td><td>Eleanor Cartwright (in vita)</td></tr>
+        <tr><td>Fratelli</td><td>Thomas Cartwright (senior); Robert Cartwright (in carcere)</td></tr>
+        <tr><td>Sorella</td><td>Clara Cartwright</td></tr>
+        <tr><td>Altezza</td><td>5 piedi e 11 pollici</td></tr>
+        <tr><td>Capelli</td><td>Castano scuro, pettinati all'indietro</td></tr>
+        <tr><td>Occhi</td><td>Grigio-verde</td></tr>
+        <tr><td>Professione</td><td>Capo Treno / Commerciante itinerante</td></tr>
+        <tr><td>Tipologia RP</td><td>Civile — Legale</td></tr>
+        <tr><td>Stato</td><td>In viaggio — senza fissa dimora</td></tr>
+      </table>
+      <div class="pg-stamp">Riservato</div>
+      <div class="pg-num">I</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Nota · Introduzione</div>
+      <div class="pg-title">Questo <em>Diario</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>Questo non è un diario nel senso comune del termine. Non ci sono date quotidiane, non ci sono confessioni sentimentali, non ci sono riflessioni sul tramonto o sull'umore del giorno. James Cartwright non è il tipo d'uomo che scrive di queste cose.</p>
+        <p>Quello che segue è una raccolta di fatti. Persone. Luoghi. Decisioni. Una mappa di quello che è stato, scritta perché James non si fida abbastanza della propria memoria da lasciarci sola con la verità.</p>
+        <div class="pg-nota"><p>"Scrivi le cose importanti. Il resto lo ricordi da solo o non vale la pena ricordarlo."<br>— Eleanor Cartwright, insegnamento di infanzia</p></div>
+        <p>Se stai leggendo questo diario senza permesso, stai commettendo un errore. Non per una questione morale. Semplicemente: alcune delle informazioni qui dentro potrebbero farti del male.</p>
+        <p style="text-align:right;font-style:italic;color:var(--ink3);font-family:'Playfair Display',serif;margin-top:16px">— J.W.C.</p>
+      </div>
+      <div class="pg-num">II</div>
+    </div>`
+  },
+
+  // ── PAGE 2: Profilo Psicologico
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Carattere · Psicologia</div>
+      <div class="pg-title">Chi è <em>Doc</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>James Cartwright è un uomo <strong>silenzioso, riflessivo e difficile da leggere</strong>. Cresciuto nel duro ambiente del Far West, ha imparato presto che la calma vale più di una pistola e che chi perde il controllo spesso perde anche la vita. È raro vederlo agitato: anche nelle situazioni peggiori mantiene sangue freddo e lucidità.</p>
+        <p>Quel soprannome — <em>Doc</em> — non nasce dalla medicina. Nasce dal modo in cui affronta i problemi. Quando gli altri urlano, lui ragiona. Quando gli altri tremano, lui resta fermo. Tra lavoratori ferroviari, commercianti e uomini di frontiera, divenne famoso proprio per quella calma quasi innaturale.</p>
+        <div class="pg-nota"><p>"Puoi urlare quanto vuoi. La situazione non cambia. Cambia solo quanto fiato ti rimane per affrontarla."</p></div>
+        <p>James tende a non legarsi alle persone. Ha visto troppe famiglie distruggersi e troppi uomini perdere tutto. Non ama parlare del proprio passato e raramente racconta qualcosa della famiglia. <strong>Preferisce ascoltare piuttosto che parlare</strong>, osservare piuttosto che intervenire.</p>
+      </div>
+      <div class="pg-num">II</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Carattere · Continua</div>
+      <div class="pg-title">Tratti <em>Distintivi</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>È <strong>metodico, disciplinato e molto paziente</strong>. Gli anni sui treni gli hanno insegnato a leggere le persone: capisce quando qualcuno mente o quando sta per succedere qualcosa di brutto prima ancora che accada. Un bagaglio lasciato nel posto sbagliato, uno sguardo che dura troppo, un uomo che suda con il freddo fuori — James nota tutto.</p>
+        <p>Non ama la violenza e cerca sempre di evitare problemi inutili. <strong>Non è un uomo coraggioso nel senso classico del termine:</strong> davanti a rapine o assalti preferisce mantenere un atteggiamento realistico, pensando prima a sopravvivere che a fare l'eroe. Ha visto abbastanza morti eroiche per sapere che il coraggio senza cervello è solo un modo elegante per finire sotto terra.</p>
+        <div class="pg-nota"><p>I suoi punti deboli: la diffidenza lo isola. Porta ancora il peso del cognome Cartwright come una pietra al collo.</p></div>
+        <p>Dietro il silenzio, però, c'è ancora un uomo capace di credere nel cambiamento — in sé stesso e negli altri. Non l'ha ancora detto a nessuno.</p>
+      </div>
+      <div class="pg-num">III</div>
+    </div>`
+  },
+
+  // ── PAGE 3: Origini e famiglia
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Famiglia · Origini</div>
+      <div class="pg-title">La <em>Famiglia</em> Cartwright</div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>I Cartwright arrivarono nel Dakota Territory nel <strong>1851</strong>, quando William Cartwright senior — il nonno di James — guidò la famiglia dal Missouri fino a Deadwood seguendo le prime piste commerciali verso ovest. Costruirono una fattoria di medie dimensioni a circa quattro miglia dalla città, allevando bestiame e coltivando mais.</p>
+        <p><strong>William Cartwright Jr. — il padre di James</strong> — nacque nel 1838 e prese in mano la fattoria a diciassette anni dopo la morte del nonno. Era un uomo severo, capace e rispettato nella zona. Non era il tipo da mostrare affetto, ma nessuno metteva in dubbio la sua onestà o la sua parola.</p>
+        <p>Sposò <strong>Eleanor Marsh</strong> nell'estate del <strong>1858</strong>, a soli vent'anni. Eleanor era figlia di un predicatore di Yankton e portò in casa una gentilezza quasi fuori posto in quelle terre. Aiutava malati e viaggiatori, leggeva la Bibbia ad alta voce e sapeva sempre trovare una parola buona anche nelle settimane più dure.</p>
+        <div class="pg-nota"><p>James somiglia alla madre nella pazienza. Somiglia al padre nel silenzio.</p></div>
+      </div>
+      <div class="pg-num">IV</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Famiglia · I Figli</div>
+      <div class="pg-title">Thomas, Robert, <em>Clara</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p><strong>Thomas Cartwright</strong> — nato nel <strong>1860</strong>, tre anni prima di James — fu sempre il figlio preferito di William. Fisico robusto, carattere diretto e poco incline alla riflessione. Prese il controllo parziale della fattoria durante l'adolescenza. Dopo la morte del padre, tentò di tenere insieme tutto da solo, ma l'alcol e i debiti lo portarono a perdere progressivamente la testa. Oggi vive ancora nella zona di Deadwood, amaro e rancoroso, convinto che James avrebbe potuto fare di più per salvare la famiglia.</p>
+        <p><strong>Robert Cartwright</strong> — nato nel <strong>1865</strong>, due anni dopo James — fu sempre il più irrequieto dei fratelli. Fin da ragazzo aveva frequentazioni sbagliate. Nel <strong>1884</strong>, a diciannove anni, partecipò alla rapina di un corriere postale vicino a Rapid City. Fu arrestato, processato e condannato a <strong>dieci anni di prigione</strong>. Fu la prima grande vergogna pubblica per la famiglia.</p>
+        <p><strong>Clara Cartwright</strong> — nata nel <strong>1868</strong>, la più giovane — è la persona che James rispetta di più al mondo, anche se evita di ammetterlo. Quando la famiglia crollò, fu lei a tentare di salvare il salvabile. Vendette quasi tutto ciò che possedeva per pagare gli avvocati di Robert. Oggi lavora come sarta a Deadwood.</p>
+      </div>
+      <div class="pg-num">V</div>
+    </div>`
+  },
+
+  // ── PAGE 4: La madre Eleanor
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Famiglia · La Madre</div>
+      <div class="pg-title">Eleanor <em>Cartwright</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>La morte di William — avvenuta nell'inverno del <strong>1882</strong>, durante una tempesta di neve che lo sorprese mentre rientrava dalla città — distrusse qualcosa dentro Eleanor che non si rimise mai più insieme.</p>
+        <p>Nei mesi successivi il crollo fu progressivo e inesorabile. Prima smise di andare in chiesa. Poi smise di uscire di casa. Le voci in città iniziarono a circolare rapidamente: la signora Cartwright stava perdendo la testa. I debiti si accumulavano. La fattoria iniziò a cedere pezzo per pezzo.</p>
+        <div class="pg-nota"><p>James non era lì quando sua madre toccò il fondo. Se n'era andato da troppo tempo. È una colpa che non si è mai perdonato del tutto.</p></div>
+        <p>Nell'estate del <strong>1884</strong>, con Robert in prigione e Thomas sempre più ubriaco, Eleanor iniziò a frequentare gli uomini di passaggio che soggiornavano all'albergo Muller ai bordi della città. Non per scelta, ma per necessità. Per sopravvivere. Per non perdere l'ultimo tetto sulla testa. <strong>Clara</strong> lo scoprì per ultima e fu la prima a cercare di cambiare le cose — troppo tardi, troppo poco.</p>
+        <p>Oggi Eleanor ha sessantadue anni. Vive nella vecchia fattoria ridotta a poco più di una baracca. Clara la tiene in vita. James non la vede dal <strong>1883</strong>. Ci pensa ogni notte.</p>
+      </div>
+      <div class="pg-num">VI</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Storia · L'Infanzia</div>
+      <div class="pg-title">Deadwood, <em>1863 – 1876</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>James nacque il <strong>12 settembre 1863</strong> durante uno dei periodi più tumultuosi del Dakota Territory. La guerra civile stava ancora distruggendo il paese, e le notizie arrivavano a Deadwood con settimane di ritardo, filtrate da bocca in bocca tra i carrettieri.</p>
+        <p>Da bambino James fu un figlio tranquillo, quasi invisibile rispetto alla personalità dominante di Thomas e all'energia caotica del piccolo Robert. Imparò a leggere da sua madre, che usava la Bibbia come primo libro di testo. Imparò il resto osservando.</p>
+        <p>La sua ossessione per i treni nacque nell'estate del <strong>1872</strong>, quando aveva nove anni, durante una delle prime corse della linea che attraversava il territorio. James rimase fermo vicino ai binari per ore a guardare quel mostro di ferro e vapore. Da quel giorno non pensò ad altro.</p>
+        <div class="pg-nota"><p>William non capiva questa passione del figlio per i treni. "Le rotaie portano via la gente", disse una volta. Non aveva torto.</p></div>
+        <p>A tredici anni, nell'estate del <strong>1876</strong>, James lasciò la fattoria. Un addio breve, senza troppe parole. Sua madre pianse. Suo padre non si voltò.</p>
+      </div>
+      <div class="pg-num">VII</div>
+    </div>`
+  },
+
+  // ── PAGE 5: Inizio carriera ferroviaria
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Carriera · 1876–1880</div>
+      <div class="pg-title">I Primi <em>Anni sui Treni</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>Il primo lavoro di James fu come <strong>pulitore di vagoni</strong> per la Chicago & Northwestern Railway, nell'autunno del <strong>1876</strong>. Guadagnava meno di un dollaro al giorno. Dormiva nei vagoni merci vuoti. Mangiava quello che trovava.</p>
+        <p>In sei mesi imparò a caricare e catalogare merci. In un anno conosceva a memoria tutte le rotte della linea tra Deadwood e Chicago. A quindici anni era già uno dei più abili caricatori del deposito di Sioux Falls — non per la forza, ma per la precisione. Pesava ogni cassa, calcolava ogni spostamento, non perdeva mai un pezzo.</p>
+        <p>Nel <strong>1878</strong>, a quindici anni, venne assunto come <strong>assistente al capo treno</strong> sulla linea merci verso Denver. Fu il primo vero salto. Il capo treno di allora, un uomo burbero di nome <strong>Harlan Briggs</strong>, lo notò per la sua capacità di stare calmo durante un tentativo di furto nel <strong>settembre 1878</strong> — il primo assalto che James visse in prima persona.</p>
+        <div class="pg-nota"><p>Briggs disse: "Quel ragazzo non ha battuto ciglio. O è stupido o ha del ghiaccio nelle vene." James aveva solo paura — imparava a nasconderla bene.</p></div>
+      </div>
+      <div class="pg-num">VIII</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Carriera · 1880–1883</div>
+      <div class="pg-title">Capo Treno <em>Ufficiale</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>Nel <strong>marzo del 1880</strong>, a soli diciassette anni, James ottenne il brevetto di <strong>Capo Treno</strong> dalla compagnia ferroviaria Missouri Pacific. Era uno dei più giovani in assoluto a ricoprire quel ruolo.</p>
+        <p>Le sue responsabilità comprendevano: supervisione del carico e scarico merci, gestione del personale di bordo, gestione delle dogane e dei manifesti, sicurezza del convoglio durante il tragitto. Gestiva transazioni commerciali per conto di mercanti che non viaggiavano di persona.</p>
+        <p>Tra il <strong>1880 e il 1883</strong> compì oltre <strong>140 viaggi</strong> su rotte commerciali che coprivano quasi tutto il West: Dakota Territory, Wyoming, Colorado, Kansas, Missouri. Trasportava minerali estratti dalle miniere, pelli di bisonte, grano, bestiame, munizioni, medicinali, strumenti agricoli. Qualunque cosa avesse un prezzo.</p>
+        <div class="pg-nota"><p>In quei tre anni James visse più di quanto molti uomini vivano in tutta la vita. E imparò che il commercio è solo un altro nome per la sopravvivenza.</p></div>
+        <p>Fu anche in questi anni che iniziò a costruirsi una reputazione come uomo <strong>affidabile</strong>. I mercanti pagavano di più per i convogli di cui era responsabile James Cartwright. Perché i carichi arrivavano.</p>
+      </div>
+      <div class="pg-num">IX</div>
+    </div>`
+  },
+
+  // ── PAGE 6: Assalti ai treni
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Incidenti · Assalti</div>
+      <div class="pg-title">I Treni <em>sotto Attacco</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>Nel corso della sua carriera, James Cartwright subì <strong>cinque assalti armati</strong> ai convogli di cui era responsabile. Nessuno finì con un bilancio privo di conseguenze.</p>
+        <p><strong>Settembre 1878 — Linea Sioux Falls–Denver:</strong><br>
+        Il primo assalto. Una banda di quattro uomini a cavallo tentò di fermare il convoglio sparando ai freni. James aveva quindici anni. Harlan Briggs gestì la situazione. James guardò e imparò. Un uomo della banda morì; il treno non si fermò. Carico: grano e farina. Perdita: nulla.</p>
+        <div class="pg-nota"><p>James ricorda ancora il suono del primo sparo. Non fu la paura a colpirlo, ma il silenzio dopo.</p></div>
+        <p><strong>Giugno 1880 — Linea Kansas City–Cheyenne:</strong><br>
+        Il primo assalto come Capo Treno. Una banda organizzata — sei uomini — bloccò i binari con un albero abbattuto all'imbocco di un canyon in Nebraska. Tre lavoratori ferroviari feriti. Rubate quattro casse di munizioni destinate a Fort Laramie. James non sparò un colpo — negoziò per guadagnare tempo finché un convoglio militare non intercettò la banda sette miglia più avanti.</p>
+      </div>
+      <div class="pg-num">X</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Incidenti · Assalti II</div>
+      <div class="pg-title">Sangue sui <em>Binari</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p><strong>Aprile 1881 — Linea Denver–Santa Fe:</strong><br>
+        L'assalto più violento. Una banda di nove uomini, ben armata, attaccò il convoglio all'alba nei pressi di Trinidad, Colorado. Due guardie private uccise. Il cassiere della compagnia ferito gravemente. Rubato l'intero carico: oro estratto dalle miniere di Cripple Creek, stimato in <strong>oltre 14.000 dollari</strong>. James fu tenuto in ostaggio per quaranta minuti. Rilasciato senza ulteriori danni fisici. La banda non fu mai catturata.</p>
+        <div class="pg-nota"><p>"Guardami come vuoi. Il carico era assicurato. La vita del cassiere no. Quella era la priorità." — Testimonianza di J. Cartwright all'inchiesta della Missouri Pacific, maggio 1881.</p></div>
+        <p><strong>Novembre 1882 — Linea Cheyenne–Deadwood:</strong><br>
+        Tentativo di assalto respinto. James riconobbe i segnali — tre uomini saliti a bordo a Wheatland con troppi bagagli e troppo poca voglia di parlare. Avvisò il macchinista e aumentò la velocità in prossimità del tratto isolato. I tre scesero alla prima fermata senza incidenti. Nessuna denuncia formale.</p>
+        <p><strong>Agosto 1883 — Linea Omaha–Kansas City:</strong><br>
+        Ultimo assalto documentato prima del rientro a Deadwood. Un uomo solo, armato, tentò di derubare il vagone postale. James lo bloccò fisicamente. Nessun morto. L'uomo fu consegnato allo sceriffo di Nebraska City.</p>
+      </div>
+      <div class="pg-num">XI</div>
+    </div>`
+  },
+
+  // ── PAGE 7: Cosa vide in viaggio
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Viaggi · Scoperte</div>
+      <div class="pg-title">Quello che <em>Vidi</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>Sette anni sui treni dell'ovest ti cambiano in un modo che non riesci a spiegare a chi è sempre rimasto fermo nello stesso posto. Non è solo la distanza percorsa. È quello che vedi lungo la strada.</p>
+        <p><strong>Vidi nascere Black Hills nel 1876.</strong> Prima che arrivassero le prime famiglie ci passai io, con le casse di provviste e gli attrezzi. Poi arrivarono i cercatori. Poi i saloon. Poi i cimiteri. Sempre nello stesso ordine.</p>
+        <p><strong>Vidi bruciare Julesburg nel 1879.</strong> Non era la prima volta che bruciava — quella città sembrava quasi cercarsi la fine da sola. Un incendio partito da una fucina si mangiò tre isolati prima che qualcuno riuscisse a fermarlo. Rimasi fermo sul convoglio fermo un'ora a guardare il fumo.</p>
+        <div class="pg-nota"><p>Il fuoco nell'ovest non ha lo stesso odore del fuoco in una città normale. Qui brucia il legno vecchio, la pelle, la polvere da sparo dimenticata in un cassetto. Brucia tutto insieme.</p></div>
+        <p><strong>Vidi la fine dei bisonti.</strong> Nel <strong>1876</strong>, sulla pianura del Kansas, i bisonti erano ancora abbastanza numerosi da fermare i treni — mandrie di migliaia di capi che attraversavano i binari per ore. Nel <strong>1882</strong>, sulla stessa rotta, non ne vidi uno solo.</p>
+      </div>
+      <div class="pg-num">XII</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Viaggi · Scoperte II</div>
+      <div class="pg-title">Lezioni dal <em>West</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p><strong>Imparai a leggere i prezzi delle merci come altri leggono le persone.</strong> Quando l'oro scende, salgono le pistole. Quando salgono i cereali, qualcosa di brutto è successo al bestiame. Il mercato dell'ovest racconta una storia ogni giorno a chi sa ascoltarla.</p>
+        <p><strong>Imparai il valore del silenzio nei posti sbagliati.</strong> In certi saloon, in certi depositi, in certi uffici doganali — la cosa più pericolosa che puoi fare è sembrare troppo intelligente. James imparò presto a sembrare esattamente quanto interessato quanto serviva, e non un grammo di più.</p>
+        <p><strong>Incontrai Frank Delaney a Dodge City nel 1881.</strong> Mercante di pellami, contrabbandiere per diletto, uomo capace di vendere ghiaccio ai nativi del New Mexico. Il commerciante più brillante che James abbia mai conosciuto. Gli insegnò le rotte dell'import/export oltre confine, i trucchi delle dogane, i contatti giusti a Laredo e a El Paso. Morì in un duello sei mesi dopo. Spreco immondo.</p>
+        <div class="pg-nota"><p>Da Delaney: "Non vendere mai quello che hai. Vendi quello che l'altro vuole avere. È diverso."</p></div>
+        <p><strong>Imparai che la ferrovia è una illusione di ordine</strong> in un mondo che non ne ha nessuno. I binari sembrano permanenti. Le stazioni sembrano solide. Ma l'ovest inghiotte tutto, prima o poi.</p>
+      </div>
+      <div class="pg-num">XIII</div>
+    </div>`
+  },
+
+  // ── PAGE 8: Il ritorno a Deadwood e il crollo
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Famiglia · Il Crollo</div>
+      <div class="pg-title">L'Inverno del <em>1882</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>La notizia della morte di suo padre raggiunse James a <strong>Omaha, Nebraska</strong>, nel <strong>gennaio del 1883</strong>, con tre settimane di ritardo. Un telegramma breve, scritto da Clara con la sua grafia piccola e precisa: <em>"Papà è morto. Tempesta. 14 dicembre. Vieni."</em></p>
+        <p>William Cartwright morì mentre rientrava dalla città su un carro, durante una tormenta di neve che investì il territorio nel dicembre del <strong>1882</strong>. Trovarono il cavallo il giorno dopo, ancora agganciato. Trovarono William tre giorni più tardi, congelato a due miglia dalla fattoria, rannicchiato sotto il carro come se stesse dormendo.</p>
+        <p>James arrivò a Deadwood nel <strong>febbraio del 1883</strong>. Trovò una casa che non riconosceva. La fattoria era silenziosa in un modo sbagliato. Eleanor non era la donna che ricordava. Thomas aveva gli occhi di qualcuno che aveva già perso e non lo sapeva ancora. Robert aveva diciotto anni e frequentava le persone sbagliate.</p>
+        <div class="pg-nota"><p>James rimase tre mesi. Tre mesi in cui cercò di sistemare qualcosa che non era sistemabile. Poi capì.</p></div>
+      </div>
+      <div class="pg-num">XIV</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Famiglia · La Partenza</div>
+      <div class="pg-title">L'Ultima <em>Mattina</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>Nell'<strong>estate del 1883</strong>, con Robert già nei guai con la legge e Thomas sempre più inaffidabile, James capì che restare a Deadwood avrebbe significato essere trascinato verso il fondo insieme al resto della famiglia. Non era un calcolo freddo. Era paura, e la lucidità sufficiente a riconoscerla.</p>
+        <p>La mattina della partenza, lasciò sul tavolo della cucina una busta con <strong>sessanta dollari</strong> — quasi tutto quello che aveva. Non scrisse nulla. Non sapeva cosa scrivere che non suonasse come una scusa.</p>
+        <p>Disse addio solo a Clara. Era l'unica sveglia a quell'ora. Gli chiese se sarebbe tornato. James disse di non saperlo. Clara non pianse. Era già abituata alle perdite.</p>
+        <div class="pg-nota"><p>"Non stai scappando da loro," disse Clara. "Stai scappando da quello che potresti diventare se rimani." Era la cosa più intelligente che James avesse mai sentito dire. E la più dolorosa.</p></div>
+        <p>Salì sul primo convoglio verso est quella mattina. Non guardò fuori dal finestrino quando il treno lasciò Deadwood. Alcune cose è meglio non vederle allontanarsi.</p>
+      </div>
+      <div class="pg-num">XV</div>
+    </div>`
+  },
+
+  // ── PAGE 9: Dopo il crollo - attività commerciali
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Carriera · 1883–Presente</div>
+      <div class="pg-title">Import, Export, <em>Sopravvivenza</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>Dopo aver lasciato Deadwood, James non tornò subito alle ferrovie. Passò i primi mesi a fare lavori occasionali: guardiano notturno in un deposito a Cheyenne, assistente in un magazzino di Laramie, intermediario per un commerciante di bestiame a Abilene che aveva bisogno di qualcuno capace di leggere i contratti senza farsi ingannare.</p>
+        <p>Nel <strong>tardo 1883</strong> riprese a viaggiare sui treni, questa volta non come dipendente fisso ma come <strong>agente commerciale indipendente</strong>. Il modello era semplice: comprava merci a basso prezzo nelle città di produzione e le rivendeva a prezzo maggiorato nelle città di frontiera dove la scarsità faceva salire i prezzi.</p>
+        <p>Le merci principali con cui lavorava:<br>
+        — Minerali e metalli grezzi dalle miniere del Colorado<br>
+        — Pellame e cuoio lavorato dal Texas<br>
+        — Grano e farina in eccedenza dal Kansas<br>
+        — Medicinali e attrezzi chirurgici (alto margine, bassa concorrenza)<br>
+        — Occasionalmente: armi e munizioni per commercianti certificati</p>
+        <div class="pg-nota"><p>I medicinali erano la merce più redditizia e meno discussa. Nessuno ti fa domande quando porti chinino in una città con la febbre gialla.</p></div>
+      </div>
+      <div class="pg-num">XVI</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Carriera · Contatti</div>
+      <div class="pg-title">Reti <em>Commerciali</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>Nel corso degli anni James ha costruito una rete discreta ma solida di contatti commerciali attraverso il West. Non amici — James non usa quella parola facilmente — ma <strong>persone di cui si fida abbastanza</strong> da fare affari.</p>
+        <table class="data-table">
+          <tr><td>William "Bull" Harmon</td><td>Proprietario deposito, Kansas City. Affidabile per stoccaggio merci, nessuna domanda.</td></tr>
+          <tr><td>Marguerite Leclerc</td><td>Commerciante di tessuti, New Orleans. Contatti con import da Messico e Cuba.</td></tr>
+          <tr><td>Joel Anker</td><td>Agente doganale, El Paso. Conosce ogni buco nella dogana del confine.</td></tr>
+          <tr><td>Silas Thorn</td><td>Macchinista, Missouri Pacific. Gli deve un favore del 1881. Non chiede quanto costa.</td></tr>
+          <tr><td>Ruth Macready</td><td>Farmacista ambulante, Denver. Fonte principale per medicinali a prezzi di costo.</td></tr>
+        </table>
+        <div class="pg-nota"><p>James tiene questi nomi in testa, mai scritti. I nomi scritti possono essere trovati. I nomi in testa muoiono con te.</p></div>
+        <p>La sua reputazione come intermediario si basa su un principio semplice che ha rispettato sempre: <strong>i carichi arrivano, i prezzi pattuiti non cambiano, la parola data non si rompe</strong>. In un West dove metà degli uomini mente per abitudine, è abbastanza per valere qualcosa.</p>
+      </div>
+      <div class="pg-num">XVII</div>
+    </div>`
+  },
+
+  // ── PAGE 10: Obiettivi e presente
+  {
+    front: `
+    <div class="pg-scroll">
+      <div class="pg-date">Presente · Stato Attuale</div>
+      <div class="pg-title">Dove Sono <em>Adesso</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>James Cartwright ha trentadue anni e non ha un letto fisso da quando ne aveva tredici. Non è un lamento — è semplicemente un fatto. Ha imparato a dormire bene sui treni, a mangiare quello che trova, a non portare più di quanto riesce a trasportare da solo.</p>
+        <p>Cerca una città. Non una qualunque. Una città <strong>abbastanza stabile</strong> da permettergli di aprire qualcosa di proprio — un ufficio commerciale, un deposito merci, forse un piccolo magazzino. Qualcosa con una porta che possa chiudere a chiave e un nome sopra scritto con la sua grafia.</p>
+        <p>Non cerca fama. Non cerca vendetta. Non cerca di salvare nessuno. Vuole solo smettere di muoversi. Vuole <strong>una vita che sia sua</strong>, in una città dove nessuno conosca il cognome Cartwright abbastanza a lungo da avere un'opinione su di esso.</p>
+        <div class="pg-nota"><p>Ha abbastanza denaro per ricominciare. Ha abbastanza esperienza per farcela. Gli manca solo il coraggio di fermarsi davvero.</p></div>
+      </div>
+      <div class="pg-num">XVIII</div>
+    </div>`,
+    back: `
+    <div class="pg-scroll">
+      <div class="pg-date">Obiettivi · Motivazioni</div>
+      <div class="pg-title">Quello che <em>Voglio</em></div>
+      <div class="pg-rule"></div>
+      <div class="pg-body">
+        <p>James ha scritto i propri obiettivi una volta sola, su un foglio che ha poi bruciato. Li ricorda a memoria.</p>
+      </div>
+      <div style="margin-top:4px">
+        <div class="tl-row"><div class="tl-yr">01</div><div class="tl-txt">Costruirsi una nuova vita attraverso il commercio e il lavoro ferroviario. Niente armi, niente lati sbagliati della legge.</div></div>
+        <div class="tl-row"><div class="tl-yr">02</div><div class="tl-txt">Gestire attività legate al trasporto merci e all'import/export in modo indipendente. Non lavorare per nessuno se possibile.</div></div>
+        <div class="tl-row"><div class="tl-yr">03</div><div class="tl-txt">Guadagnarsi rispetto come uomo affidabile e lavoratore serio. Nient'altro di più, niente di meno.</div></div>
+        <div class="tl-row"><div class="tl-yr">04</div><div class="tl-txt">Lasciarsi alle spalle il nome Cartwright. Non cancellarlo — semplicemente smettere di essere definito da esso.</div></div>
+        <div class="tl-row"><div class="tl-yr">05</div><div class="tl-txt">Accumulare abbastanza denaro da smettere di vivere continuamente in viaggio. Avere qualcosa di fisso.</div></div>
+        <div class="tl-row"><div class="tl-yr">06</div><div class="tl-txt">Evitare il mondo criminale. Ha visto dove porta. Non è una scelta morale — è una scelta pratica.</div></div>
+      </div>
+      <div class="pg-num">XIX</div>
+    </div>`
+  },
+];
+
+/* ══════════════════════════════════════
+   BOOK ENGINE
+══════════════════════════════════════ */
+let bookPages = [];
+let isOpen = false;
+let currentPageNum = 0;
+let isDragging = false;
+let dragPage = null;
+let dragDirection = null;
+let dragStartX = 0;
+let pageWidthPx = 0;
+let currentAngle = 0;
+
+function buildBook(){
+  const bookEl = document.getElementById('book');
+  const spine = bookEl.querySelector('.book-spine');
+  bookEl.innerHTML = '';
+  bookEl.appendChild(spine);
+  bookPages = [];
+
+  const totalPages = PAGES.length + 2; // +1 cover page, +1 backcover page
+
+  for(let i = 0; i < totalPages; i++){
+    const pageEl = document.createElement('div');
+    pageEl.className = 'page';
+    pageEl.dataset.page = String(i);
+
+    const front = document.createElement('div');
+    front.className = 'page-front';
+    const back = document.createElement('div');
+    back.className = 'page-back';
+
+    if(i === 0){
+      // COVER
+      front.classList.add('cover-face');
+      front.innerHTML = buildCover();
+      back.classList.add('cover-face', 'cover-back');
+      back.innerHTML = buildInnerCover();
+    } else if(i === totalPages - 1){
+      // BACKCOVER
+      front.classList.add('cover-face', 'cover-back');
+      front.innerHTML = '';
+      back.classList.add('cover-face', 'cover-back');
+      back.innerHTML = buildBackCover();
+    } else {
+      const pData = PAGES[i - 1];
+      front.classList.add('paper-page');
+      back.classList.add('paper-page-left');
+      front.innerHTML = pData.front || blankPage();
+      back.innerHTML = pData.back || blankPage();
+    }
+
+    pageEl.appendChild(front);
+    pageEl.appendChild(back);
+    bookEl.appendChild(pageEl);
+    bookPages.push(pageEl);
+  }
+
+  attachBookEvents();
+}
+
+function buildCover(){
+  return `<div class="cover-inner">
+    <div class="c-top">
+      <div class="c-eyebrow">Red Dead Redemption — Roleplay</div>
+      <img src="image/logo.png" class="c-logo" alt="" onerror="this.style.display='none'">
+      <div class="c-rule"></div>
+    </div>
+    <div class="c-img-wrap">
+      <img src="image/logo.png" class="c-img" alt="Doc Cartwright" onerror="this.style.opacity='0'">
+    </div>
+    <div class="c-text">
+      <div class="c-lbl">Nome</div>
+      <div class="c-val">James Cartwright</div>
+      <div class="c-lbl">Soprannome</div>
+      <div class="c-val">"Doc"</div>
+      <div class="c-lbl">Professione</div>
+      <div class="c-val sm">Capo Treno · Commerciante</div>
+    </div>
+    <div class="c-bottom">
+      <div class="c-rule"></div>
+      <div class="c-badge">Diario Personale · 1863 – Presente</div>
+      <div class="c-confid">Documento personale · Non distribuire</div>
+    </div>
+  </div>`;
+}
+
+function buildInnerCover(){
+  return `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:40px">
+    <div style="text-align:center;opacity:.25">
+      <div style="font-family:'Special Elite',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#d4a84b;line-height:2.5">
+        James William Cartwright<br>
+        Deadwood, Dakota Territory<br>
+        12 Settembre 1863<br>
+        ——<br>
+        Capo Treno · Commerciante Itinerante<br>
+        Civile · Legale
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildBackCover(){
+  return `<div class="backcover-inner">
+    <img src="image/logo.png" class="bc-seal" alt="" onerror="this.style.display='none'">
+    <div class="c-rule" style="width:120px"></div>
+    <div class="bc-text">
+      James "Doc" Cartwright<br>
+      Red Dead Redemption — Roleplay<br>
+      ——<br>
+      Civile · Legale
+    </div>
+  </div>`;
+}
+
+function blankPage(){
+  return `<div style="width:100%;height:100%;background:var(--paper)"></div>`;
+}
+
+function attachBookEvents(){
+  const bookEl = document.getElementById('book');
+  bookEl.onmousedown = onDragStart;
+  bookEl.ontouchstart = onDragStart;
+
+  let justOpened = false;
+  let coverAnimating = false;
+  bookEl.addEventListener('click', function(e){
+    if(!isOpen && !isDragging && !coverAnimating){
+      coverAnimating = true;
+      openBook();
+      justOpened = true;
+      setTimeout(()=>{ justOpened = false; coverAnimating = false; }, 600);
+      e.stopPropagation();
+    }
+  });
+  bookEl.addEventListener('click', function(e){
+    if(!isOpen || isDragging || justOpened || coverAnimating) return;
+    const rect = bookEl.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const edge = 100;
+    if(cx > rect.width - edge) nextPage();
+    else if(cx < edge) prevPage();
+  });
+}
+
+function openBook(){
+  if(isOpen) return;
+  isOpen = true;
+  document.getElementById('book').classList.remove('closed');
+  document.getElementById('book-scene').classList.remove('closed-view');
+  bookPages[0].classList.add('flipped');
+  currentPageNum = 1;
+  updateIndicator();
+  document.getElementById('hint-line').style.opacity = '0';
+}
+
+window.nextPage = function(){
+  const total = bookPages.length;
+  if(currentPageNum >= total) return;
+  bookPages[currentPageNum].classList.add('flipped');
+  bookPages[currentPageNum].style.transform = '';
+  currentPageNum++;
+  updateIndicator();
+};
+
+window.prevPage = function(){
+  if(currentPageNum <= 0) return;
+  currentPageNum--;
+  bookPages[currentPageNum].classList.remove('flipped');
+  bookPages[currentPageNum].style.transform = '';
+  updateIndicator();
+  if(currentPageNum === 0){
+    setTimeout(()=>{
+      isOpen = false;
+      document.getElementById('book').classList.add('closed');
+    }, 420);
+  }
+};
+
+function updateIndicator(){
+  const el = document.getElementById('page-indicator');
+  if(!isOpen || currentPageNum === 0){ el.textContent = '—'; return; }
+  el.textContent = currentPageNum + ' / ' + (bookPages.length - 1);
+}
+
+function onDragStart(e){
+  if(!isOpen) return;
+  const bookEl = document.getElementById('book');
+  const rect = bookEl.getBoundingClientRect();
+  const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+  const clickX = clientX - rect.left;
+  const center = rect.width / 2;
+  const total = bookPages.length;
+
+  if(clickX > center && currentPageNum < total){
+    dragDirection = 'next'; dragPage = bookPages[currentPageNum];
+  } else if(clickX <= center && currentPageNum > 1){
+    dragDirection = 'prev'; dragPage = bookPages[currentPageNum - 1];
+  } else return;
+
+  isDragging = true; dragStartX = clientX;
+  pageWidthPx = rect.width / 2;
+  currentAngle = (dragDirection === 'next') ? 0 : -180;
+  dragPage.classList.add('dragging');
+  dragPage.style.transition = 'none';
+  if(e.cancelable) e.preventDefault();
+}
+
+function onDragMove(e){
+  if(!isDragging || !dragPage) return;
+  const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+  const dx = dragStartX - clientX;
+  if(dragDirection === 'next'){
+    currentAngle = Math.max(-180, Math.min(0, -(dx / pageWidthPx) * 180));
+  } else {
+    currentAngle = Math.min(0, Math.max(-180, -180 + ((-dx) / pageWidthPx) * 180));
+  }
+  dragPage.style.transform = 'rotateY(' + currentAngle + 'deg)';
+  if(e.cancelable) e.preventDefault();
+}
+
+function onDragEnd(){
+  if(!isDragging || !dragPage) return;
+  isDragging = false;
+  dragPage.classList.remove('dragging');
+  dragPage.style.transition = '';
+  dragPage.style.transform = '';
+  if(dragDirection === 'next' && currentAngle < -70) nextPage();
+  else if(dragDirection === 'prev' && currentAngle > -110) prevPage();
+  dragPage = null; dragDirection = null;
+}
+
+document.addEventListener('mousemove', onDragMove);
+document.addEventListener('mouseup', onDragEnd);
+document.addEventListener('touchmove', e=>{ onDragMove(e); }, { passive: false });
+document.addEventListener('touchend', onDragEnd);
+document.addEventListener('dragstart', e=>{ if(e.target.closest('#book')) e.preventDefault(); });
+
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowRight'){
+    if(!isOpen) openBook();
+    else nextPage();
+  }
+  if(e.key === 'ArrowLeft') prevPage();
+});
+
+/* ══════════════════════════════════════
+   TITLE SCREEN → APP
+══════════════════════════════════════ */
+window.enterApp = function(){
+  const ts = document.getElementById('title-screen');
+  ts.classList.add('fade-out');
+  setTimeout(()=>{
+    ts.style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    buildBook();
+    updateIndicator();
+  }, 800);
+};
+
+/* ══════════════════════════════════════
+   ANIMATED WESTERN BACKGROUND
+══════════════════════════════════════ */
+(function(){
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
-  let W, H, particles, stars;
+  let W, H, stars, particles;
 
-  function resize() {
-    W = canvas.width  = window.innerWidth;
+  function resize(){
+    W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
   }
 
-  function randomBetween(a, b) { return a + Math.random() * (b - a); }
+  function rnd(a, b){ return a + Math.random() * (b - a); }
 
-  function initStars() {
-    stars = Array.from({ length: 120 }, () => ({
+  function initStars(){
+    stars = Array.from({length: 100}, ()=>({
       x: Math.random() * W,
-      y: Math.random() * H * 0.6,
-      r: randomBetween(0.3, 1.4),
-      a: randomBetween(0.2, 0.7),
-      flicker: randomBetween(0.003, 0.012),
+      y: Math.random() * H * 0.55,
+      r: rnd(0.3, 1.3),
+      a: rnd(0.2, 0.6),
+      flicker: rnd(0.003, 0.015),
       phase: Math.random() * Math.PI * 2
     }));
   }
 
-  function initParticles() {
-    particles = Array.from({ length: 55 }, () => ({
+  function initParticles(){
+    particles = Array.from({length: 40}, ()=>({
       x: Math.random() * W,
       y: Math.random() * H,
-      vx: randomBetween(-0.08, 0.08),
-      vy: randomBetween(-0.15, -0.04),
-      r: randomBetween(0.5, 2.2),
-      a: randomBetween(0.04, 0.18),
+      vx: rnd(-0.06, 0.06),
+      vy: rnd(-0.12, -0.03),
+      r: rnd(0.5, 2),
+      a: rnd(0.04, 0.16),
       life: Math.random()
     }));
   }
 
   let t = 0;
-  function draw() {
+  function draw(){
     ctx.clearRect(0, 0, W, H);
 
-    // Sky gradient — warm dark brown to near-black
     const sky = ctx.createLinearGradient(0, 0, 0, H);
-    sky.addColorStop(0,   '#0e0a04');
-    sky.addColorStop(0.4, '#1a1005');
-    sky.addColorStop(1,   '#221506');
+    sky.addColorStop(0, '#080502');
+    sky.addColorStop(0.45, '#120a03');
+    sky.addColorStop(1, '#1a1005');
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, W, H);
 
-    // Subtle warm glow at horizon
-    const hor = ctx.createRadialGradient(W * 0.5, H * 0.72, 0, W * 0.5, H * 0.72, W * 0.55);
-    hor.addColorStop(0,   'rgba(180,100,30,0.10)');
-    hor.addColorStop(0.5, 'rgba(140,70,20,0.05)');
-    hor.addColorStop(1,   'transparent');
-    ctx.fillStyle = hor;
+    const glow = ctx.createRadialGradient(W * .5, H * .7, 0, W * .5, H * .7, W * .5);
+    glow.addColorStop(0, 'rgba(160,90,20,.08)');
+    glow.addColorStop(1, 'transparent');
+    ctx.fillStyle = glow;
     ctx.fillRect(0, 0, W, H);
 
-    // Stars
     t += 0.01;
-    for (const s of stars) {
-      const alpha = s.a * (0.7 + 0.3 * Math.sin(t * s.flicker * 60 + s.phase));
+    for(const s of stars){
+      const alpha = s.a * (0.65 + 0.35 * Math.sin(t * s.flicker * 60 + s.phase));
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,240,200,${alpha})`;
+      ctx.fillStyle = `rgba(255,240,195,${alpha})`;
       ctx.fill();
     }
 
-    // Dust / ember particles
-    for (const p of particles) {
-      p.x += p.vx;
-      p.y += p.vy;
-      p.life += 0.003;
-      if (p.life > 1) {
-        p.x = Math.random() * W;
-        p.y = H + 10;
-        p.life = 0;
-        p.a = randomBetween(0.04, 0.18);
-        p.vy = randomBetween(-0.15, -0.04);
-        p.vx = randomBetween(-0.08, 0.08);
+    for(const p of particles){
+      p.x += p.vx; p.y += p.vy; p.life += 0.003;
+      if(p.life > 1){
+        p.x = Math.random() * W; p.y = H + 5; p.life = 0;
+        p.a = rnd(0.04, 0.16); p.vy = rnd(-0.12, -0.03); p.vx = rnd(-0.06, 0.06);
       }
       const fade = p.life < 0.1 ? p.life / 0.1 : p.life > 0.85 ? (1 - p.life) / 0.15 : 1;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(210,160,60,${p.a * fade})`;
+      ctx.fillStyle = `rgba(200,150,50,${p.a * fade})`;
       ctx.fill();
     }
-
-    // Horizontal ground line glow
-    const ground = ctx.createLinearGradient(0, H * 0.75, 0, H * 0.78);
-    ground.addColorStop(0, 'rgba(160,90,20,0.08)');
-    ground.addColorStop(1, 'transparent');
-    ctx.fillStyle = ground;
-    ctx.fillRect(0, H * 0.75, W, H * 0.03);
 
     requestAnimationFrame(draw);
   }
 
-  window.addEventListener('resize', () => { resize(); initStars(); initParticles(); });
+  window.addEventListener('resize', ()=>{ resize(); initStars(); initParticles(); });
   resize(); initStars(); initParticles(); draw();
 })();
 
-// ── SCROLL REVEAL ──
-(function() {
-  const els = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.08 });
-  els.forEach(el => io.observe(el));
 })();
 </script>
 </body>
